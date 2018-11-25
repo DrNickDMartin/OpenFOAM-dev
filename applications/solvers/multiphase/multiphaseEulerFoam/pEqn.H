@@ -5,10 +5,10 @@
     // tmp<fvScalarMatrix> pEqnComp1;
     // tmp<fvScalarMatrix> pEqnComp2;
 
-    // //if (transonic)
+    // // if (transonic)
     // //{
     // //}
-    // //else
+    // // else
     // {
     //     surfaceScalarField phid1("phid1", fvc::interpolate(psi1)*phi1);
     //     surfaceScalarField phid2("phid2", fvc::interpolate(psi2)*phi2);
@@ -229,8 +229,7 @@
             //     (alpha1/rho1)*pEqnComp1()
             //   + (alpha2/rho2)*pEqnComp2()
             // ) +
-            pEqnIncomp,
-            mesh.solver(p_rgh.select(pimple.finalInnerIter()))
+            pEqnIncomp
         );
 
         if (pimple.finalNonOrthogonalIter())
@@ -288,7 +287,7 @@
                         )
                     )/phase.rho();
 
-                //phase.U() = fvc::reconstruct(phase.phi());
+                // phase.U() = fvc::reconstruct(phase.phi());
                 phase.U().correctBoundaryConditions();
 
                 U += alpha*phase.U();
@@ -298,7 +297,7 @@
         }
     }
 
-    //p = max(p, pMin);
+    // p = max(p, pMin);
 
     #include "continuityErrs.H"
 

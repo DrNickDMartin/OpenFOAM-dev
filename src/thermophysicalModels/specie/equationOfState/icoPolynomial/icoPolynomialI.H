@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -95,12 +95,34 @@ inline Foam::scalar Foam::icoPolynomial<Specie, PolySize>::H
     scalar T
 ) const
 {
-    return 0;
+    return p/this->rho(p, T);
 }
 
 
 template<class Specie, int PolySize>
 inline Foam::scalar Foam::icoPolynomial<Specie, PolySize>::Cp
+(
+    scalar p,
+    scalar T
+) const
+{
+    return 0;
+}
+
+
+template<class Specie, int PolySize>
+inline Foam::scalar Foam::icoPolynomial<Specie, PolySize>::E
+(
+    scalar p,
+    scalar T
+) const
+{
+    return 0;
+}
+
+
+template<class Specie, int PolySize>
+inline Foam::scalar Foam::icoPolynomial<Specie, PolySize>::Cv
 (
     scalar p,
     scalar T
@@ -150,7 +172,7 @@ inline Foam::scalar Foam::icoPolynomial<Specie, PolySize>::CpMCv
     scalar T
 ) const
 {
-    return -(p/sqr(rhoCoeffs_.value(T)))*rhoCoeffs_.derivative(T);
+    return 0;
 }
 
 

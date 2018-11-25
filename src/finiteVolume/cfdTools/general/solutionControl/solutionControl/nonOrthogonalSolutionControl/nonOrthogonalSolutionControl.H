@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -88,6 +88,7 @@ public:
             //- Read controls
             virtual bool read();
 
+
         // Access
 
             //- Maximum number of non-orthogonal correctors
@@ -99,7 +100,12 @@ public:
             //- Flag to indicate the last non-orthogonal iteration
             inline bool finalNonOrthogonalIter() const;
 
+
         // Evolution
+
+            //- Return true if the non-orthogonality loop is a subsidiary
+            //  i.e. a sub-loop of the PISO or PIMPLE algorithms
+            virtual bool nonOrthSubLoop() const;
 
             //- Non-orthogonal corrector loop
             bool correctNonOrthogonal();

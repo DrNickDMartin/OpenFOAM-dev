@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2017 OpenFOAM Foundation
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2017-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -29,11 +29,12 @@ Description
 
     Reference:
     \verbatim
-        "On the Theory of Oscillatory Waves"
-        G G Stokes
-        Transactions of the Cambridge Philosophical Society (1847), Volume 8,
-        Pages 441-455, Equations 18 and 19 (leading terms only)
+        Stokes, G.G. (1847)
+        On the theory of oscillatory waves.
+        Transactions of the Cambridge Philosophical Society, 8, 441.
     \endverbatim
+
+    See the leading terms of equations 18 and 19.
 
 SourceFiles
     Airy.C

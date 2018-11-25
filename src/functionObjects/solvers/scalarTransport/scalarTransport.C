@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2012-2017 OpenFOAM Foundation
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2012-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -224,7 +224,7 @@ bool Foam::functionObjects::scalarTransport::execute()
 
             fvOptions_.constrain(sEqn);
 
-            sEqn.solve(mesh_.solverDict(schemesField_));
+            sEqn.solve(schemesField_);
         }
     }
     else if (phi.dimensions() == dimVolume/dimTime)
@@ -244,7 +244,7 @@ bool Foam::functionObjects::scalarTransport::execute()
 
             fvOptions_.constrain(sEqn);
 
-            sEqn.solve(mesh_.solverDict(schemesField_));
+            sEqn.solve(schemesField_);
         }
     }
     else

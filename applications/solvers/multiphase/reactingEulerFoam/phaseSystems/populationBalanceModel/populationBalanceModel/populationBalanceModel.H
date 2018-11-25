@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2017-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -52,19 +52,17 @@ Description
     References:
     \verbatim
         Coalescence and breakup term formulation:
-            Kumar, S. & Ramkrishna, D. (1996).
-            On the solution of population balance equations by
-            discretization - I. A fixed pivot technique.
-            Chemical Engineering Science,
-            51(8), 1311-1332.
+        Kumar, S., & Ramkrishna, D. (1996).
+        On the solution of population balance equations by discretization-I. A
+        fixed pivot technique.
+        Chemical Engineering Science, 51(8), 1311-1332.
     \endverbatim
 
     \verbatim
         Binary breakup term formulation:
-            Liao, Y.; Oertel, R.; Kriebitzsch, S.; Schlegel, F.; Lucas, D.
-            (2018). A Discrete Population Balance Equation for Binary Breakage.
-            International Journal for Numerical Methods in Fluids,
-            DOI 10.1002/fld.4491.
+        Liao, Y., Oertel, R., Kriebitzsch, S., Schlegel, F., & Lucas, D. (2018).
+        A discrete population balance equation for binary breakage.
+        International Journal for Numerical Methods in Fluids, 87(4), 202-215.
     \endverbatim
 
 Usage
@@ -154,6 +152,7 @@ SourceFiles
 #include "sizeGroup.H"
 #include "phasePair.H"
 #include "pimpleControl.H"
+#include "phaseCompressibleTurbulenceModelFwd.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -210,10 +209,10 @@ class populationBalanceModel
         const phaseModel& continuousPhase_;
 
         //- velocityGroups belonging to this populationBalance
-        List<velocityGroup*> velocityGroups_;
+        UPtrList<velocityGroup> velocityGroups_;
 
         //- sizeGroups belonging to this populationBalance
-        List<sizeGroup*> sizeGroups_;
+        UPtrList<sizeGroup> sizeGroups_;
 
         //- List of unordered phasePairs in this populationBalance
         phasePairTable phasePairs_;
@@ -269,25 +268,28 @@ class populationBalanceModel
         //- Zeroeth order rate
         autoPtr<volScalarField> nucleationRate_;
 
-        //- Total void fraction of phases belonging to this populationBalance
-        volScalarField alphas_;
-
-        //- Average velocity
-        volVectorField U_;
+        //- Total void fraction
+        autoPtr<volScalarField> alphas_;
 
         //- Mean Sauter diameter
-        autoPtr<volScalarField> d_;
+        autoPtr<volScalarField> dsm_;
+
+        //- Average velocity
+        autoPtr<volVectorField> U_;
+
+        //- Counter for interval between source term updates
+        label sourceUpdateCounter_;
 
 
     // Private member functions
 
         void registerVelocityAndSizeGroups();
 
-        void add(sizeGroup* group);
+        void add(sizeGroup& group);
 
         void createPhasePairs();
 
-        void preSolve();
+        void correct();
 
         void birthByCoalescence(const label j, const label k);
 
@@ -313,10 +315,18 @@ class populationBalanceModel
 
         void calcAlphas();
 
+        tmp<volScalarField> calcDsm();
+
         void calcVelocity();
 
-        tmp<volScalarField> dsm() const;
+        //- Return whether the sources should be updated on this iteration
+        bool updateSources();
 
+        //- Return the number of corrections
+        inline label nCorr() const;
+
+        //- Return the interval at which the sources are updated
+        inline label sourceUpdateInterval() const;
 
 public:
 
@@ -393,10 +403,10 @@ public:
         inline const phaseModel& continuousPhase() const;
 
         //- Return the velocityGroups belonging to this populationBalance
-        inline const List<velocityGroup*>& velocityGroups() const;
+        inline const UPtrList<velocityGroup>& velocityGroups() const;
 
         //- Return the sizeGroups belonging to this populationBalance
-        inline const List<sizeGroup*>& sizeGroups() const;
+        inline const UPtrList<sizeGroup>& sizeGroups() const;
 
         //- Return list of unordered phasePairs in this populationBalance
         inline const phasePairTable& phasePairs() const;
@@ -416,6 +426,16 @@ public:
             const label i,
             const dimensionedScalar& v
         ) const;
+
+        //- Return the surface tension coefficient between a given dispersed
+        //  and the continuous phase
+        const tmp<volScalarField> sigmaWithContinuousPhase
+        (
+            const phaseModel& dispersedPhase
+        ) const;
+
+        //- Return reference to turbulence model of the continuous phase
+        const phaseCompressibleTurbulenceModel& continuousTurbulence() const;
 
         //- Solve the population balance equation
         void solve();

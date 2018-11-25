@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -67,7 +67,8 @@ greyDiffusiveRadiationMixedFvPatchScalarField
     (
         p,
         ptf.emissivityMethod(),
-        ptf.emissivity_
+        ptf.emissivity_,
+        mapper
     ),
     TName_(ptf.TName_)
 {}
@@ -142,6 +143,27 @@ greyDiffusiveRadiationMixedFvPatchScalarField
 
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
+
+void Foam::radiation::greyDiffusiveRadiationMixedFvPatchScalarField::autoMap
+(
+    const fvPatchFieldMapper& m
+)
+{
+    mixedFvPatchScalarField::autoMap(m);
+    radiationCoupledBase::autoMap(m);
+}
+
+
+void Foam::radiation::greyDiffusiveRadiationMixedFvPatchScalarField::rmap
+(
+    const fvPatchScalarField& ptf,
+    const labelList& addr
+)
+{
+    mixedFvPatchScalarField::rmap(ptf, addr);
+    radiationCoupledBase::rmap(ptf, addr);
+}
+
 
 void Foam::radiation::greyDiffusiveRadiationMixedFvPatchScalarField::
 updateCoeffs()
@@ -222,7 +244,7 @@ updateCoeffs()
             // direction into the wall
             valueFraction()[facei] = 0.0;
             refGrad()[facei] = 0.0;
-            refValue()[facei] = 0.0; //not used
+            refValue()[facei] = 0.0; // not used
 
             // Incident heat flux on this ray direction
             qin[facei] = Iw[facei]*nAve[facei];

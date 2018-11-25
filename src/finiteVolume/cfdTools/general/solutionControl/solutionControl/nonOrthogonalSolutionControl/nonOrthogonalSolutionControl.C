@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -73,17 +73,51 @@ bool Foam::nonOrthogonalSolutionControl::read()
 }
 
 
+bool Foam::nonOrthogonalSolutionControl::nonOrthSubLoop() const
+{
+    return false;
+}
+
+
 bool Foam::nonOrthogonalSolutionControl::correctNonOrthogonal()
 {
+    static bool finalIteration = false;
+
     read();
+
+    if (nonOrthCorr_ == 0)
+    {
+        finalIteration =
+            mesh().data::lookupOrDefault<bool>("finalIteration", false);
+
+        if (finalIteration)
+        {
+            mesh().data::remove("finalIteration");
+        }
+    }
 
     if (finalNonOrthogonalIter())
     {
         nonOrthCorr_ = 0;
+
+        if
+        (
+           !finalIteration
+         && mesh().data::lookupOrDefault<bool>("finalIteration", false)
+        )
+        {
+            mesh().data::remove("finalIteration");
+        }
+
         return false;
     }
 
-    ++ nonOrthCorr_;
+    nonOrthCorr_++;
+
+    if (finalNonOrthogonalIter() && (finalIteration || !nonOrthSubLoop()))
+    {
+        mesh().data::add("finalIteration", true);
+    }
 
     return true;
 }

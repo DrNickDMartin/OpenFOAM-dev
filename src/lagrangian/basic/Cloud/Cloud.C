@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -47,10 +47,7 @@ void Foam::Cloud<ParticleType>::checkPatches() const
             const cyclicAMIPolyPatch& cami =
                 refCast<const cyclicAMIPolyPatch>(pbm[patchi]);
 
-            if (cami.owner())
-            {
-                ok = ok && (cami.AMI().singlePatchProc() != -1);
-            }
+            ok = ok && cami.singlePatchProc() != -1;
         }
     }
 
@@ -171,7 +168,7 @@ void Foam::Cloud<ParticleType>::move
     // Initialise the stepFraction moved for the particles
     forAllIter(typename Cloud<ParticleType>, *this, pIter)
     {
-        pIter().stepFraction() = 0;
+        pIter().reset();
     }
 
     // List of lists of particles to be transferred for all of the

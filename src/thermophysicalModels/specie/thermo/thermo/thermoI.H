@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -106,14 +106,6 @@ Foam::species::thermo<Thermo, Type>::heName()
 
 template<class Thermo, template<class> class Type>
 inline Foam::scalar
-Foam::species::thermo<Thermo, Type>::Cv(const scalar p, const scalar T) const
-{
-    return this->Cp(p, T) - this->CpMCv(p, T);
-}
-
-
-template<class Thermo, template<class> class Type>
-inline Foam::scalar
 Foam::species::thermo<Thermo, Type>::Cpv(const scalar p, const scalar T) const
 {
     return Type<thermo<Thermo, Type>>::Cpv(*this, p, T);
@@ -146,22 +138,6 @@ inline Foam::scalar
 Foam::species::thermo<Thermo, Type>::HE(const scalar p, const scalar T) const
 {
     return Type<thermo<Thermo, Type>>::HE(*this, p, T);
-}
-
-
-template<class Thermo, template<class> class Type>
-inline Foam::scalar
-Foam::species::thermo<Thermo, Type>::Es(const scalar p, const scalar T) const
-{
-    return this->Hs(p, T) - p/this->rho(p, T);
-}
-
-
-template<class Thermo, template<class> class Type>
-inline Foam::scalar
-Foam::species::thermo<Thermo, Type>::Ea(const scalar p, const scalar T) const
-{
-    return this->Ha(p, T) - p/this->rho(p, T);
 }
 
 
@@ -441,6 +417,35 @@ inline Foam::scalar Foam::species::thermo<Thermo, Type>::TEa
         &thermo<Thermo, Type>::Cv,
         &thermo<Thermo, Type>::limit
     );
+}
+
+
+template<class Thermo, template<class> class Type>
+inline Foam::scalar
+Foam::species::thermo<Thermo, Type>::dKcdTbyKc
+(
+    const scalar p,
+    const scalar T
+) const
+{
+    const scalar nm = this->Y()/this->W();
+
+    if (equal(nm, small))
+    {
+        return -this->dGdT(Pstd, T)*this->Y()/RR;
+    }
+    else
+    {
+        return -(nm/T + this->dGdT(Pstd, T)*this->Y()/RR);
+    }
+}
+
+
+template<class Thermo, template<class> class Type>
+inline Foam::scalar
+Foam::species::thermo<Thermo, Type>::dcpdT(const scalar p, const scalar T) const
+{
+    return this->dCpdT(p, T)*this->W();;
 }
 
 

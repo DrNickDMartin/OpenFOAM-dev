@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -48,11 +48,19 @@ Foam::pimpleControl::pimpleControl(fvMesh& mesh, const word& algorithmName)
     {
         printCorrResidualControls(nCorrPimple_);
     }
-    else
+
+    Info<< nl << algorithmName << ": Operating solver in "
+        << (mesh.steady() ? "steady-state" : mesh.transient() ? "transient" :
+            "mixed steady-state/transient") << " mode with " << nCorrPimple_
+        << " outer corrector" << (nCorrPimple_ == 1 ? "" : "s") << nl;
+
+    if (nCorrPimple_ == 1)
     {
-        Info<< nl << algorithmName << ": Operating solver in PISO mode" << nl
-            << endl;
+        Info<< algorithmName << ": Operating solver in "
+            << (mesh.steady() ? "SIMPLE" : "PISO") << " mode" << nl;
     }
+
+    Info<< nl << endl;
 }
 
 
@@ -103,11 +111,7 @@ bool Foam::pimpleControl::run(Time& time)
 {
     read();
 
-    if (converged())
-    {
-        time.writeAndEnd();
-    }
-    else
+    if (!endIfConverged(time))
     {
         storePrevIterFields();
     }
@@ -120,11 +124,7 @@ bool Foam::pimpleControl::loop(Time& time)
 {
     read();
 
-    if (converged())
-    {
-        time.writeAndEnd();
-    }
-    else
+    if (!endIfConverged(time))
     {
         storePrevIterFields();
     }

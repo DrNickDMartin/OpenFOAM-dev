@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2012-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -24,7 +24,6 @@ License
 \*---------------------------------------------------------------------------*/
 
 #include "perfectFluid.H"
-#include "specie.H"
 
 // * * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * //
 
@@ -95,12 +94,26 @@ inline Foam::scalar Foam::perfectFluid<Specie>::rho(scalar p, scalar T) const
 template<class Specie>
 inline Foam::scalar Foam::perfectFluid<Specie>::H(scalar p, scalar T) const
 {
-    return 0;
+    return p/rho(p, T) - Pstd/rho(Pstd, T);
 }
 
 
 template<class Specie>
 inline Foam::scalar Foam::perfectFluid<Specie>::Cp(scalar p, scalar T) const
+{
+    return 0;
+}
+
+
+template<class Specie>
+inline Foam::scalar Foam::perfectFluid<Specie>::E(scalar p, scalar T) const
+{
+    return 0;
+}
+
+
+template<class Specie>
+inline Foam::scalar Foam::perfectFluid<Specie>::Cv(scalar p, scalar T) const
 {
     return 0;
 }
@@ -130,7 +143,10 @@ inline Foam::scalar Foam::perfectFluid<Specie>::Z(scalar p, scalar T) const
 template<class Specie>
 inline Foam::scalar Foam::perfectFluid<Specie>::CpMCv(scalar p, scalar T) const
 {
-    return 0;
+    const scalar R = this->R();
+    const scalar rho = this->rho(p, T);
+
+    return R*sqr(p/(rho*R*T));
 }
 
 
@@ -231,15 +247,28 @@ inline Foam::perfectFluid<Specie> Foam::operator==
      == static_cast<const Specie&>(pf2)
     );
 
-    const scalar Y1 = pf1.Y()/sp.Y();
-    const scalar Y2 = pf2.Y()/sp.Y();
+    if (mag(sp.Y()) < small)
+    {
+        return perfectFluid<Specie>
+        (
+            sp,
+            pf1.R_,
+            pf1.rho0_
+        );
+    }
+    else
+    {
+        const scalar Y1 = pf1.Y()/sp.Y();
+        const scalar Y2 = pf2.Y()/sp.Y();
+        const scalar oneByR = Y2/pf2.R_ - Y1/pf1.R_;
 
-    return perfectFluid<Specie>
-    (
-        sp,
-        1.0/(Y2/pf2.R_ - Y1/pf1.R_),
-        Y2*pf2.rho0_ - Y1*pf1.rho0_
-    );
+        return perfectFluid<Specie>
+        (
+            sp,
+            mag(oneByR) < small ? great : 1/oneByR,
+            Y2*pf2.rho0_ - Y1*pf1.rho0_
+        );
+    }
 }
 
 

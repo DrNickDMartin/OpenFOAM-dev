@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 {
     #include "postProcess.H"
 
-    #include "setRootCase.H"
+    #include "setRootCaseLists.H"
     #include "createTime.H"
     #include "createMesh.H"
     #include "createControl.H"
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
                     );
 
                     pEqn.setReference(pRefCell, pRefValue);
-                    pEqn.solve(mesh.solver(p.select(piso.finalInnerIter())));
+                    pEqn.solve();
 
                     if (piso.finalNonOrthogonalIter())
                     {
@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
                     fvm::laplacian(rABf, pB) == fvc::div(phiB)
                 );
 
-                pBEqn.solve(mesh.solver(pB.select(bpiso.finalInnerIter())));
+                pBEqn.solve();
 
                 if (bpiso.finalNonOrthogonalIter())
                 {

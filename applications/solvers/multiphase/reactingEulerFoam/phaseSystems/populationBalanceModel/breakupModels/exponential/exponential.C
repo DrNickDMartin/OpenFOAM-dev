@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2017-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -63,7 +63,7 @@ void Foam::diameterModels::breakupModels::exponential::setBreakupRate
     const label i
 )
 {
-    const sizeGroup& fi = *popBal_.sizeGroups()[i];
+    const sizeGroup& fi = popBal_.sizeGroups()[i];
 
     breakupRate.primitiveFieldRef() =
         C_*exp(exponent_*fi.x().value());

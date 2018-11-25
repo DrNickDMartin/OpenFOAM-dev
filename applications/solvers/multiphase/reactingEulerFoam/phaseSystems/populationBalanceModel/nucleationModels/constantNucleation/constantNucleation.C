@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -104,7 +104,7 @@ Foam::diameterModels::nucleationModels::constantNucleation::addToNucleationRate
     const label i
 )
 {
-    const sizeGroup& fi = *popBal_.sizeGroups()[i];
+    const sizeGroup& fi = popBal_.sizeGroups()[i];
     phaseModel& phase = const_cast<phaseModel&>(fi.phase());
     volScalarField& rho = phase.thermoRef().rho();
 

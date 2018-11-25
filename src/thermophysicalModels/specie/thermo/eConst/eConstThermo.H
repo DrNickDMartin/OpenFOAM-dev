@@ -1,8 +1,8 @@
-/*---------------------------------------------------------------------------* \
+/*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2017 OpenFOAM Foundation
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -139,20 +139,31 @@ public:
 
         // Fundamental properties
 
-            //- Heat capacity at constant pressure [J/(kg K)]
-            inline scalar Cp(const scalar p, const scalar T) const;
+            //- Heat capacity at constant volume [J/(kg K)]
+            inline scalar Cv(const scalar p, const scalar T) const;
 
-            //- Absolute Enthalpy [J/kg]
-            inline scalar Ha(const scalar p, const scalar T) const;
+            //- Sensible internal energy [J/kg]
+            inline scalar Es(const scalar p, const scalar T) const;
 
-            //- Sensible enthalpy [J/kg]
-            inline scalar Hs(const scalar p, const scalar T) const;
+            //- Absolute internal energy [J/kg]
+            inline scalar Ea(const scalar p, const scalar T) const;
 
             //- Chemical enthalpy [J/kg]
             inline scalar Hc() const;
 
             //- Entropy [J/(kg K)]
             inline scalar S(const scalar p, const scalar T) const;
+
+            #include "EtoHthermo.H"
+
+
+        // Derivative term used for Jacobian
+
+            //- Derivative of Gibbs free energy w.r.t. temperature
+            inline scalar dGdT(const scalar p, const scalar T) const;
+
+            //- Temperature derivative of heat capacity at constant pressure
+            inline scalar dCpdT(const scalar p, const scalar T) const;
 
 
         // I-O

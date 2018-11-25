@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2015-2017 OpenFOAM Foundation
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2015-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -24,9 +24,6 @@ License
 Class
     Foam::compressible::alphatWallBoilingWallFunctionFvPatchScalarField
 
-Group
-    grpCmpWallFunctions
-
 Description
     A thermal wall function for simulation of subcooled nucleate wall boiling
     with runtime selctable submodels for:
@@ -42,19 +39,19 @@ Description
 
     References:
     \verbatim
-        "On the modeling of multidimensional effects in boiling channels"
-        Kurul, N., Podowski, M.Z.,
-        ANS Proceedings, National Heat Transfer Conference,
-        Minneapolis, Minnesota, USA, July 28-31, 1991,
-        ISBN: 0-89448-162-1, pp. 30-40
+        Kurul, N., & Podowski, M.Z. (1991).
+        On the modeling of multidimensional effects in boiling channels.
+        ANS. Proc. National Heat Transfer Con. Minneapolis, Minnesota, USA,
+        1991.
+        ISBN: 0-89448-162-1, pp. 30-40.
     \endverbatim
 
     \verbatim
-        "Development and validation of a boiling model for OpenFOAM
-        multiphase solver"
-        Peltola, J., Pättikangas, T.J.H.,
-        CFD4NRS-4 Conference Proceedings, paper 59,
-        Daejeon, Korea, September 10-12 2012
+        Peltola, J., & Pättikangas, T.J.H. (2012).
+        Development and validation of a boiling model for OpenFOAM multiphase
+        solver.
+        CFD4NRS-4 Conference Proceedings, Daejeon, Korea, 2012.
+        paper 59.
     \endverbatim
 
 Usage
@@ -123,8 +120,8 @@ SourceFiles
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef compressiblealphatWallBoilingWallFunctionFvPatchScalarField_H
-#define compressiblealphatWallBoilingWallFunctionFvPatchScalarField_H
+#ifndef compressible_alphatWallBoilingWallFunctionFvPatchScalarField_H
+#define compressible_alphatWallBoilingWallFunctionFvPatchScalarField_H
 
 #include "alphatPhaseChangeJayatillekeWallFunctionFvPatchScalarField.H"
 #include "partitioningModel.H"

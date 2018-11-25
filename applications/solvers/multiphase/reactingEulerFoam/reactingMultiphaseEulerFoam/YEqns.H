@@ -24,9 +24,7 @@
             );
 
             YiEqn.relax();
-            YiEqn.solve(mesh.solver("Yi"));
+            YiEqn.solve("Yi");
         }
     }
-
-    fluid.massTransfer(); // updates interfacial mass flow rates
 }

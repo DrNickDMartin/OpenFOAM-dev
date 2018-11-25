@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2012-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -64,7 +64,7 @@ void Foam::conformationSurfaces::hasBoundedVolume
             List<volumeType> vTypes
             (
                 pts.size(),
-                volumeType::UNKNOWN
+                volumeType::unknown
             );
 
             surface.getVolumeType(pts, vTypes);
@@ -558,10 +558,7 @@ Foam::conformationSurfaces::conformationSurfaces
 
     // Extend the global bounds to stop the bound box sitting on the surfaces
     // to be conformed to
-    //globalBounds_ = globalBounds_.extend(rndGen_, 1e-4);
-
     vector newSpan = 1e-4*globalBounds_.span();
-
     globalBounds_.min() -= newSpan;
     globalBounds_.max() += newSpan;
 
@@ -572,7 +569,7 @@ Foam::conformationSurfaces::conformationSurfaces
     referenceVolumeTypes_.setSize
     (
         surfaces_.size(),
-        volumeType::UNKNOWN
+        volumeType::unknown
     );
 
     Info<< endl
@@ -652,7 +649,7 @@ bool Foam::conformationSurfaces::outside
 ) const
 {
     return wellOutside(pointField(1, samplePt), scalarField(1, 0))[0];
-    //return !inside(samplePt);
+    // return !inside(samplePt);
 }
 
 
@@ -669,7 +666,7 @@ Foam::Field<bool> Foam::conformationSurfaces::wellInOutSide
         List<volumeType>
         (
             samplePts.size(),
-            volumeType::UNKNOWN
+            volumeType::unknown
         )
     );
 
@@ -693,7 +690,7 @@ Foam::Field<bool> Foam::conformationSurfaces::wellInOutSide
     // Assume that the point is wellInside until demonstrated otherwise.
     Field<bool> insideOutsidePoint(samplePts.size(), testForInside);
 
-    //Check if the points are inside the surface by the given distance squared
+    // Check if the points are inside the surface by the given distance squared
 
     labelList hitSurfaces;
     List<pointIndexHit> hitInfo;
@@ -734,7 +731,7 @@ Foam::Field<bool> Foam::conformationSurfaces::wellInOutSide
             if
             (
                 !surface.hasVolumeType()
-             //&& surfaceVolumeTests[s][i] == volumeType::UNKNOWN
+             //&& surfaceVolumeTests[s][i] == volumeType::unknown
             )
             {
                 pointField sample(1, samplePts[i]);
@@ -763,7 +760,7 @@ Foam::Field<bool> Foam::conformationSurfaces::wellInOutSide
                 }
             }
 
-            if (surfaceVolumeTests[s][i] == volumeType::OUTSIDE)
+            if (surfaceVolumeTests[s][i] == volumeType::outside)
             {
                 if
                 (
@@ -775,7 +772,7 @@ Foam::Field<bool> Foam::conformationSurfaces::wellInOutSide
                     break;
                 }
             }
-            else if (surfaceVolumeTests[s][i] == volumeType::INSIDE)
+            else if (surfaceVolumeTests[s][i] == volumeType::inside)
             {
                 if
                 (
@@ -1182,9 +1179,9 @@ void Foam::conformationSurfaces::findAllNearestEdges
 ) const
 {
     // Initialise
-    //featuresHit.setSize(features_.size());
-    //featuresHit = -1;
-    //edgeHitsByFeature.setSize(features_.size());
+    // featuresHit.setSize(features_.size());
+    // featuresHit = -1;
+    // edgeHitsByFeature.setSize(features_.size());
 
     // Work arrays
     List<pointIndexHit> hitInfo(extendedFeatureEdgeMesh::nEdgeTypes);

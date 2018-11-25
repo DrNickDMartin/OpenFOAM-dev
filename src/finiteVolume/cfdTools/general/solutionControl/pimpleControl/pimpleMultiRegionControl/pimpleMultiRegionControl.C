@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -78,12 +78,17 @@ Foam::pimpleMultiRegionControl::pimpleMultiRegionControl
     pimpleControls_(),
     solidControls_()
 {
+    bool allSteady = true, allTransient = true;
+
     forAll(pimpleMeshes, i)
     {
         pimpleControls_.append
         (
             new pimpleNoLoopControl(pimpleMeshes[i], algorithmName)
         );
+
+        allSteady = allSteady && pimpleMeshes[i].steady();
+        allTransient = allTransient && pimpleMeshes[i].transient();
     }
 
     forAll(solidMeshes, i)
@@ -92,6 +97,9 @@ Foam::pimpleMultiRegionControl::pimpleMultiRegionControl
         (
             new solidNoLoopControl(solidMeshes[i], algorithmName)
         );
+
+        allSteady = allSteady && solidMeshes[i].steady();
+        allTransient = allTransient && solidMeshes[i].transient();
     }
 
     read();
@@ -120,11 +128,18 @@ Foam::pimpleMultiRegionControl::pimpleMultiRegionControl
         }
     }
 
-    if (nCorrPimple_ == 1)
+    Info<< nl << algorithmName << ": Operating solver in "
+        << (allSteady ? "steady-state" : allTransient ? "transient" :
+            "mixed steady-state/transient") << " mode with " << nCorrPimple_
+        << " outer corrector" << (nCorrPimple_ == 1 ? "" : "s") << nl;
+
+    if ((allSteady || allTransient) && nCorrPimple_ == 1)
     {
-        Info<< nl << algorithmName << ": Operating solver in PISO mode" << nl
-            << endl;
+        Info<< algorithmName << ": Operating solver in "
+            << (allSteady ? "SIMPLE" : "PISO") << " mode" << nl;
     }
+
+    Info<< nl << endl;
 }
 
 
@@ -302,11 +317,7 @@ bool Foam::pimpleMultiRegionControl::run(Time& time)
 {
     read();
 
-    if (converged())
-    {
-        time.writeAndEnd();
-    }
-    else
+    if (!endIfConverged(time))
     {
         forAll(pimpleControls_, i)
         {
@@ -326,11 +337,7 @@ bool Foam::pimpleMultiRegionControl::loop(Time& time)
 {
     read();
 
-    if (converged())
-    {
-        time.writeAndEnd();
-    }
-    else
+    if (!endIfConverged(time))
     {
         forAll(pimpleControls_, i)
         {

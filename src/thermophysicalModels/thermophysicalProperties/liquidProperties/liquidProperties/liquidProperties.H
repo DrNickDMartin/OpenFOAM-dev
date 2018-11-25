@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -214,14 +214,14 @@ public:
 
         // Fundamental thermodynamic properties
 
-            //- Absolute Enthalpy [J/kg]
-            inline scalar Ha(const scalar p, const scalar T) const;
-
             //- Sensible enthalpy [J/kg]
             inline scalar Hs(const scalar p, const scalar T) const;
 
             //- Chemical enthalpy [J/kg]
             inline scalar Hc() const;
+
+            //- Absolute Enthalpy [J/kg]
+            inline scalar Ha(const scalar p, const scalar T) const;
 
             // Entropy [J/(kg K)]
             scalar S(const scalar p, const scalar T) const;

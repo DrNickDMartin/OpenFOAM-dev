@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -119,9 +119,6 @@ public:
 
         //- Return the phase mean diameter field
         virtual tmp<volScalarField> d() const = 0;
-
-        //- Correct the diameter field
-        virtual void correct();
 
         //- Read phaseProperties dictionary
         virtual bool read(const dictionary& phaseProperties) = 0;

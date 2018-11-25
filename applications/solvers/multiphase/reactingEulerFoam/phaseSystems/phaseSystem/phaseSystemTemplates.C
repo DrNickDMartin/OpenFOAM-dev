@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2015-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -100,6 +100,8 @@ void Foam::phaseSystem::generatePairsAndSubModels
     (
         blendingMethods_.found(modelName)
       ? blendingMethods_[modelName]
+      : blendingMethods_.found(member(modelName))
+      ? blendingMethods_[member(modelName)]
       : blendingMethods_["default"]
     );
 
@@ -396,6 +398,38 @@ const modelType& Foam::phaseSystem::lookupSubModel
 ) const
 {
     return lookupSubModel<modelType>(orderedPhasePair(dispersed, continuous));
+}
+
+
+template<class modelType>
+bool Foam::phaseSystem::foundBlendedSubModel(const phasePair& key) const
+{
+    if
+    (
+        mesh().foundObject<BlendedInterfacialModel<modelType>>
+        (
+            IOobject::groupName
+            (
+                BlendedInterfacialModel<modelType>::typeName,
+                key.name()
+            )
+        )
+     || mesh().foundObject<BlendedInterfacialModel<modelType>>
+        (
+            IOobject::groupName
+            (
+                BlendedInterfacialModel<modelType>::typeName,
+                key.otherName()
+            )
+        )
+    )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 

@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -296,13 +296,12 @@ void reactingOneDim::solveSpeciesMass()
 
         }
 
-        YiEqn.solve(regionMesh().solver("Yi"));
+        YiEqn.solve("Yi");
         Yi.max(0.0);
         Yt += Yi;
     }
 
     Ys_[Ys_.size() - 1] = 1.0 - Yt;
-
 }
 
 

@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2017 OpenFOAM Foundation
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -130,7 +130,7 @@ bool Foam::functionEntries::includeEntry::execute
         includeFileName(is.name().path(), rawFName, parentDict)
     );
 
-    //IFstream ifs(fName);
+    // IFstream ifs(fName);
     autoPtr<ISstream> ifsPtr(fileHandler().NewIFstream(fName));
     ISstream& ifs = ifsPtr();
 
@@ -140,7 +140,26 @@ bool Foam::functionEntries::includeEntry::execute
         {
             Info<< fName << endl;
         }
+
+        // Cache the FoamFile entry if present
+        dictionary foamFileDict;
+        if (parentDict.found("FoamFile"))
+        {
+            foamFileDict = parentDict.subDict("FoamFile");
+        }
+
+        // Read and clear the FoamFile entry
         parentDict.read(ifs);
+
+        // Reinstate original FoamFile entry
+        if (!foamFileDict.isNull())
+        {
+            dictionary parentDictTmp(parentDict);
+            parentDict.clear();
+            parentDict.add("FoamFile", foamFileDict);
+            parentDict += parentDictTmp;
+        }
+
         return true;
     }
     else
@@ -171,7 +190,7 @@ bool Foam::functionEntries::includeEntry::execute
         includeFileName(is.name().path(), rawFName, parentDict)
     );
 
-    //IFstream ifs(fName);
+    // IFstream ifs(fName);
     autoPtr<ISstream> ifsPtr(fileHandler().NewIFstream(fName));
     ISstream& ifs = ifsPtr();
 

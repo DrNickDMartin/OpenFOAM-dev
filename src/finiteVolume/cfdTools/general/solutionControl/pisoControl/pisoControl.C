@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -68,17 +68,51 @@ bool Foam::pisoControl::read()
 }
 
 
+bool Foam::pisoControl::nonOrthSubLoop() const
+{
+    return true;
+}
+
+
 bool Foam::pisoControl::correct()
 {
+    static bool finalIteration = false;
+
     read();
+
+    if (corrPISO_ == 0)
+    {
+        finalIteration =
+            mesh().data::lookupOrDefault<bool>("finalIteration", false);
+
+        if (finalIteration)
+        {
+            mesh().data::remove("finalIteration");
+        }
+    }
 
     if (finalPISOIter())
     {
         corrPISO_ = 0;
+
+        if
+        (
+           !finalIteration
+         && mesh().data::lookupOrDefault<bool>("finalIteration", false)
+        )
+        {
+            mesh().data::remove("finalIteration");
+        }
+
         return false;
     }
 
-    ++ corrPISO_;
+    corrPISO_++;
+
+    if (finalPISOIter())
+    {
+        mesh().data::add("finalIteration", true);
+    }
 
     return true;
 }

@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -23,9 +23,6 @@ License
 
 Class
     Foam::radiation::wideBandDiffusiveRadiationMixedFvPatchScalarField
-
-Group
-    grpThermoBoundaryConditions
 
 Description
     This boundary condition provides a wide-band, diffusive radiation
@@ -67,6 +64,7 @@ namespace Foam
 {
 namespace radiation
 {
+
 /*---------------------------------------------------------------------------*\
       Class wideBandDiffusiveRadiationMixedFvPatchScalarField Declaration
 \*---------------------------------------------------------------------------*/
@@ -168,6 +166,20 @@ public:
             }
 
 
+            //- Map (and resize as needed) from self given a mapping object
+            virtual void autoMap
+            (
+                const fvPatchFieldMapper&
+            );
+
+            //- Reverse map the given fvPatchField onto this fvPatchField
+            virtual void rmap
+            (
+                const fvPatchScalarField&,
+                const labelList&
+            );
+
+
         // Evaluation functions
 
             //- Update the coefficients associated with the patch field
@@ -183,8 +195,8 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+} // End namespace radiation
 } // End namespace Foam
-}
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 

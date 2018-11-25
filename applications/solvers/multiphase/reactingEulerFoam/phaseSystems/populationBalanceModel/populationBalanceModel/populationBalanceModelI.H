@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2017-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -22,6 +22,23 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 \*---------------------------------------------------------------------------*/
+
+// * * * * * * * * * * * * Private Member Functions * * * * * * * * * * * * //
+
+inline Foam::label Foam::diameterModels::populationBalanceModel::nCorr() const
+{
+    return mesh_.solverDict(name_).lookupType<label>("nCorr");
+}
+
+
+inline Foam::label
+Foam::diameterModels::populationBalanceModel::sourceUpdateInterval() const
+{
+    return
+        mesh_.solverDict(name_)
+       .lookupOrDefault<label>("sourceUpdateInterval", 1);
+}
+
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
@@ -53,14 +70,14 @@ Foam::diameterModels::populationBalanceModel::continuousPhase() const
 }
 
 
-inline const Foam::List<Foam::diameterModels::velocityGroup*>&
+inline const Foam::UPtrList<Foam::diameterModels::velocityGroup>&
 Foam::diameterModels::populationBalanceModel::velocityGroups() const
 {
     return velocityGroups_;
 }
 
 
-inline const Foam::List<Foam::diameterModels::sizeGroup*>&
+inline const Foam::UPtrList<Foam::diameterModels::sizeGroup>&
 Foam::diameterModels::populationBalanceModel::sizeGroups() const
 {
     return sizeGroups_;
@@ -84,14 +101,28 @@ Foam::diameterModels::populationBalanceModel::v() const
 inline const Foam::volScalarField&
 Foam::diameterModels::populationBalanceModel::alphas() const
 {
-    return alphas_;
+    if (velocityGroups_.size() > 1)
+    {
+        return alphas_();
+    }
+    else
+    {
+        return velocityGroups_.first().phase();
+    }
 }
 
 
 inline const Foam::volVectorField&
 Foam::diameterModels::populationBalanceModel::U() const
 {
-    return U_;
+    if (velocityGroups_.size() > 1)
+    {
+        return U_();
+    }
+    else
+    {
+        return velocityGroups_.first().phase().U();
+    }
 }
 
 

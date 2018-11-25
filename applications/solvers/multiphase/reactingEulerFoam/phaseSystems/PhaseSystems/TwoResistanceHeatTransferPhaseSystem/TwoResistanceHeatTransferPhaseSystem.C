@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2015-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -252,9 +252,9 @@ heatTransfer() const
 
 template<class BasePhaseSystem>
 void Foam::TwoResistanceHeatTransferPhaseSystem<BasePhaseSystem>::
-correctThermo()
+correctEnergyTransport()
 {
-    phaseSystem::correctThermo();
+    BasePhaseSystem::correctEnergyTransport();
 
     correctInterfaceThermo();
 }

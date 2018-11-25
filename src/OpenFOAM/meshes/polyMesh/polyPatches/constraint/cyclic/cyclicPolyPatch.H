@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -229,7 +229,8 @@ public:
             const dictionary& dict,
             const label index,
             const polyBoundaryMesh& bm,
-            const word& patchType
+            const word& patchType,
+            const transformType defaultTransform = UNKNOWN
         );
 
         //- Construct as copy, resetting the boundary mesh

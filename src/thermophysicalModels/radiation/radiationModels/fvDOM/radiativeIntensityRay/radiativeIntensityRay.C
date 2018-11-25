@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -269,11 +269,7 @@ Foam::scalar Foam::radiation::radiativeIntensityRay::correct()
 
         IiEq.relax();
 
-        const solverPerformance ILambdaSol = solve
-        (
-            IiEq,
-            mesh_.solver("Ii")
-        );
+        const solverPerformance ILambdaSol = solve(IiEq, "Ii");
 
         const scalar initialRes =
             ILambdaSol.initialResidual()*omega_/dom_.omegaMax();

@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2012-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -847,6 +847,8 @@ private:
             const fileName& instance,
             const pointField& points,
             faceList& faces,
+            labelList& owner,
+            labelList& neighbour,
             const wordList& patchNames,
             const PtrList<dictionary>& patchDicts
         ) const;

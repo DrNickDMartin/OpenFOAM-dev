@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2013-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -107,12 +107,36 @@ inline Foam::scalar Foam::adiabaticPerfectFluid<Specie>::H
     scalar T
 ) const
 {
+    // ***HGW This needs to be added, it is not 0
     return 0;
 }
 
 
 template<class Specie>
 inline Foam::scalar Foam::adiabaticPerfectFluid<Specie>::Cp
+(
+    scalar p,
+    scalar T
+) const
+{
+    return 0;
+}
+
+
+template<class Specie>
+inline Foam::scalar Foam::adiabaticPerfectFluid<Specie>::E
+(
+    scalar p,
+    scalar T
+) const
+{
+    // ***HGW This needs to be added, it is H - p/rho
+    return 0;
+}
+
+
+template<class Specie>
+inline Foam::scalar Foam::adiabaticPerfectFluid<Specie>::Cv
 (
     scalar p,
     scalar T

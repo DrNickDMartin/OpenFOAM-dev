@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -22,17 +22,17 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::kineticTheoryModel
+    Foam::RASModels::kineticTheoryModel
 
 Description
     Kinetic theory particle phase RAS model
 
     Reference:
     \verbatim
-        "Derivation, implementation, and validation of computer simulation
-         models for gas-solid fluidized beds",
-        van Wachem, B.G.M.,
-        Ph.D. Thesis, Delft University of Technology, Amsterdam, 2000.
+        van Wachem, B. G. M. (2000).
+        Derivation, implementation, and validation of computer simulation models
+        for gas-solid fluidized beds.
+        PhD Thesis, TU Delft.
     \endverbatim
 
     There are no default model coefficients.

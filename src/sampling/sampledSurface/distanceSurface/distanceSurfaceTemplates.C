@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -37,20 +37,10 @@ Foam::distanceSurface::sampleField
     const GeometricField<Type, fvPatchField, volMesh>& vField
 ) const
 {
-    if (cell_)
-    {
-        return tmp<Field<Type>>
-        (
-            new Field<Type>(vField, isoSurfCellPtr_().meshCells())
-        );
-    }
-    else
-    {
-        return tmp<Field<Type>>
-        (
-            new Field<Type>(vField, isoSurfPtr_().meshCells())
-        );
-    }
+    return tmp<Field<Type>>
+    (
+        new Field<Type>(vField, isoSurfPtr_().meshCells())
+    );
 }
 
 
@@ -72,31 +62,15 @@ Foam::distanceSurface::interpolateField
         volPointInterpolation::New(fvm).interpolate(volFld)
     );
 
-    // Sample.
-    if (cell_)
-    {
-        return isoSurfCellPtr_().interpolate
+    return isoSurfPtr_().interpolate
+    (
         (
-            (
-                average_
-              ? pointAverage(pointFld())()
-              : volFld
-            ),
-            pointFld()
-        );
-    }
-    else
-    {
-        return isoSurfPtr_().interpolate
-        (
-            (
-                average_
-              ? pointAverage(pointFld())()
-              : volFld
-            ),
-            pointFld()
-        );
-    }
+            average_
+          ? pointAverage(pointFld())()
+          : volFld
+        ),
+        pointFld()
+    );
 }
 
 

@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -340,17 +340,6 @@ const Foam::dictionary& Foam::solution::solutionDict() const
 
 
 const Foam::dictionary& Foam::solution::solverDict(const word& name) const
-{
-    if (debug)
-    {
-        Info<< "Lookup solver for " << name << endl;
-    }
-
-    return solvers_.subDict(name);
-}
-
-
-const Foam::dictionary& Foam::solution::solver(const word& name) const
 {
     if (debug)
     {

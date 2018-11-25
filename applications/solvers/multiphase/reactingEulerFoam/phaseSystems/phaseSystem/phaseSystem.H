@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2015-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -368,6 +368,10 @@ public:
                 const phaseModel& dispersed,
                 const phaseModel& continuous
             ) const;
+
+            //- Check availability of a blended sub model for a given phase pair
+            template<class modelType>
+            bool foundBlendedSubModel(const phasePair& key) const;
 
             //- Return a blended sub model between a phase pair
             template<class modelType>

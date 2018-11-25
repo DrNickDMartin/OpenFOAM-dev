@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2017 OpenFOAM Foundation
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -473,6 +473,13 @@ void DimensionedField<Type, GeoMesh>::operator=
 {
     dimensions_ = dt.dimensions();
     Field<Type>::operator=(dt.value());
+}
+
+
+template<class Type, class GeoMesh>
+void DimensionedField<Type, GeoMesh>::operator=(const zero&)
+{
+    Field<Type>::operator=(Zero);
 }
 
 

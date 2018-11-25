@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2017 OpenFOAM Foundation
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -600,9 +600,11 @@ public:
         void operator=(const GeometricField<Type, PatchField, GeoMesh>&);
         void operator=(const tmp<GeometricField<Type, PatchField, GeoMesh>>&);
         void operator=(const dimensioned<Type>&);
+        void operator=(const zero&);
 
         void operator==(const tmp<GeometricField<Type, PatchField, GeoMesh>>&);
         void operator==(const dimensioned<Type>&);
+        void operator==(const zero&);
 
         void operator+=(const GeometricField<Type, PatchField, GeoMesh>&);
         void operator+=(const tmp<GeometricField<Type, PatchField, GeoMesh>>&);

@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -100,16 +100,6 @@ inline Foam::scalar Foam::hConstThermo<EquationOfState>::Cp
 
 
 template<class EquationOfState>
-inline Foam::scalar Foam::hConstThermo<EquationOfState>::Ha
-(
-    const scalar p, const scalar T
-) const
-{
-    return Cp_*T + Hf_ + EquationOfState::H(p, T);
-}
-
-
-template<class EquationOfState>
 inline Foam::scalar Foam::hConstThermo<EquationOfState>::Hs
 (
     const scalar p, const scalar T
@@ -127,12 +117,42 @@ inline Foam::scalar Foam::hConstThermo<EquationOfState>::Hc() const
 
 
 template<class EquationOfState>
+inline Foam::scalar Foam::hConstThermo<EquationOfState>::Ha
+(
+    const scalar p, const scalar T
+) const
+{
+    return Hs(p, T) + Hc();
+}
+
+
+template<class EquationOfState>
 inline Foam::scalar Foam::hConstThermo<EquationOfState>::S
 (
     const scalar p, const scalar T
 ) const
 {
     return Cp_*log(T/Tstd) + EquationOfState::S(p, T);
+}
+
+
+template<class EquationOfState>
+inline Foam::scalar Foam::hConstThermo<EquationOfState>::dGdT
+(
+    const scalar p, const scalar T
+) const
+{
+    return 0;
+}
+
+
+template<class EquationOfState>
+inline Foam::scalar Foam::hConstThermo<EquationOfState>::dCpdT
+(
+    const scalar p, const scalar T
+) const
+{
+    return 0;
 }
 
 

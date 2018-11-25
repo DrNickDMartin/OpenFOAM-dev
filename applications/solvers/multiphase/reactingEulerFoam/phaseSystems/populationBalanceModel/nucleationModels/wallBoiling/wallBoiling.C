@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -150,7 +150,7 @@ Foam::diameterModels::nucleationModels::wallBoiling::addToNucleationRate
     const label i
 )
 {
-    const sizeGroup& fi = *popBal_.sizeGroups()[i];
+    const sizeGroup& fi = popBal_.sizeGroups()[i];
     const phaseModel& phase = fi.phase();
     const volScalarField& rho = phase.rho();
     const tmp<volScalarField> talphat(turbulence_.alphat());

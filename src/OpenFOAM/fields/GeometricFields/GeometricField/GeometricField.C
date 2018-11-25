@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2017 OpenFOAM Foundation
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -399,8 +399,6 @@ Foam::GeometricField<Type, PatchField, GeoMesh>::GeometricField
             << " number of mesh elements = " << GeoMesh::size(this->mesh())
             << exit(FatalIOError);
     }
-
-    readOldTimeIfPresent();
 
     if (debug)
     {
@@ -961,8 +959,6 @@ void Foam::GeometricField<Type, PatchField, GeoMesh>::relax(const scalar alpha)
 template<class Type, template<class> class PatchField, class GeoMesh>
 void Foam::GeometricField<Type, PatchField, GeoMesh>::relax()
 {
-    word name = this->name();
-
     if
     (
         this->mesh().data::template lookupOrDefault<bool>
@@ -970,14 +966,14 @@ void Foam::GeometricField<Type, PatchField, GeoMesh>::relax()
             "finalIteration",
             false
         )
+     && this->mesh().relaxField(this->name() + "Final")
     )
     {
-        name += "Final";
+        relax(this->mesh().fieldRelaxationFactor(this->name() + "Final"));
     }
-
-    if (this->mesh().relaxField(name))
+    else if (this->mesh().relaxField(this->name()))
     {
-        relax(this->mesh().fieldRelaxationFactor(name));
+        relax(this->mesh().fieldRelaxationFactor(this->name()));
     }
 }
 
@@ -1235,6 +1231,17 @@ void Foam::GeometricField<Type, PatchField, GeoMesh>::operator=
 
 
 template<class Type, template<class> class PatchField, class GeoMesh>
+void Foam::GeometricField<Type, PatchField, GeoMesh>::operator=
+(
+    const zero&
+)
+{
+    ref() = Zero;
+    boundaryFieldRef() = Zero;
+}
+
+
+template<class Type, template<class> class PatchField, class GeoMesh>
 void Foam::GeometricField<Type, PatchField, GeoMesh>::operator==
 (
     const tmp<GeometricField<Type, PatchField, GeoMesh>>& tgf
@@ -1261,6 +1268,17 @@ void Foam::GeometricField<Type, PatchField, GeoMesh>::operator==
 {
     ref() = dt;
     boundaryFieldRef() == dt.value();
+}
+
+
+template<class Type, template<class> class PatchField, class GeoMesh>
+void Foam::GeometricField<Type, PatchField, GeoMesh>::operator==
+(
+    const zero&
+)
+{
+    ref() = Zero;
+    boundaryFieldRef() == Zero;
 }
 
 

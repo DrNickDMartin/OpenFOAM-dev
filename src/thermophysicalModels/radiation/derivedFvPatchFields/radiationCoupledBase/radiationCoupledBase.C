@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -28,38 +28,40 @@ License
 #include "mappedPatchBase.H"
 #include "fvPatchFieldMapper.H"
 #include "radiationModel.H"
+#include "opaqueSolid.H"
 #include "absorptionEmissionModel.H"
 
 // * * * * * * * * * * * * * Static Member Data  * * * * * * * * * * * * * * //
 
 namespace Foam
 {
+namespace radiation
+{
     defineTypeNameAndDebug(radiationCoupledBase, 0);
 }
-
-
-namespace Foam
-{
-    template<>
-    const char* Foam::NamedEnum
-    <
-        Foam::radiationCoupledBase::emissivityMethodType,
-        2
-    >::names[] =
-    {
-        "solidRadiation",
-        "lookup"
-    };
 }
 
+template<>
+const char* Foam::NamedEnum
+<
+    Foam::radiation::radiationCoupledBase::emissivityMethodType,
+    2
+>::names[] =
+{
+    "solidRadiation",
+    "lookup"
+};
 
-const Foam::NamedEnum<Foam::radiationCoupledBase::emissivityMethodType, 2>
-    Foam::radiationCoupledBase::emissivityMethodTypeNames_;
+const Foam::NamedEnum
+<
+    Foam::radiation::radiationCoupledBase::emissivityMethodType,
+    2
+> Foam::radiation::radiationCoupledBase::emissivityMethodTypeNames_;
 
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::radiationCoupledBase::radiationCoupledBase
+Foam::radiation::radiationCoupledBase::radiationCoupledBase
 (
     const fvPatch& patch,
     const word& calculationType,
@@ -72,7 +74,7 @@ Foam::radiationCoupledBase::radiationCoupledBase
 {}
 
 
-Foam::radiationCoupledBase::radiationCoupledBase
+Foam::radiation::radiationCoupledBase::radiationCoupledBase
 (
     const fvPatch& patch,
     const word& calculationType,
@@ -86,7 +88,7 @@ Foam::radiationCoupledBase::radiationCoupledBase
 {}
 
 
-Foam::radiationCoupledBase::radiationCoupledBase
+Foam::radiation::radiationCoupledBase::radiationCoupledBase
 (
     const fvPatch& patch,
     const dictionary& dict
@@ -137,13 +139,13 @@ Foam::radiationCoupledBase::radiationCoupledBase
 
 // * * * * * * * * * * * * * * * * Destructor    * * * * * * * * * * * * * * //
 
-Foam::radiationCoupledBase::~radiationCoupledBase()
+Foam::radiation::radiationCoupledBase::~radiationCoupledBase()
 {}
 
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-Foam::scalarField Foam::radiationCoupledBase::emissivity() const
+Foam::scalarField Foam::radiation::radiationCoupledBase::emissivity() const
 {
     switch (method_)
     {
@@ -155,19 +157,20 @@ Foam::scalarField Foam::radiationCoupledBase::emissivity() const
 
             const polyMesh& nbrMesh = mpp.sampleMesh();
 
-            const radiation::radiationModel& radiation =
-                nbrMesh.lookupObject<radiation::radiationModel>
+            const radiation::opaqueSolid& radiation =
+                nbrMesh.lookupObject<radiation::opaqueSolid>
                 (
                     "radiationProperties"
                 );
-
 
             const fvMesh& nbrFvMesh = refCast<const fvMesh>(nbrMesh);
 
             const fvPatch& nbrPatch =
                 nbrFvMesh.boundary()[mpp.samplePolyPatch().index()];
 
-
+            // NOTE: for an opaqueSolid the absorptionEmission model returns the
+            // emissivity of the surface rather than the emission coefficient
+            // and the input specification MUST correspond to this.
             scalarField emissivity
             (
                 radiation.absorptionEmission().e()().boundaryField()
@@ -178,13 +181,12 @@ Foam::scalarField Foam::radiationCoupledBase::emissivity() const
             mpp.distribute(emissivity);
 
             return emissivity;
-
         }
         break;
 
         case LOOKUP:
         {
-            // return local value
+            // Return local value
             return emissivity_;
         }
 
@@ -203,7 +205,7 @@ Foam::scalarField Foam::radiationCoupledBase::emissivity() const
 }
 
 
-void Foam::radiationCoupledBase::autoMap
+void Foam::radiation::radiationCoupledBase::autoMap
 (
     const fvPatchFieldMapper& m
 )
@@ -212,7 +214,7 @@ void Foam::radiationCoupledBase::autoMap
 }
 
 
-void Foam::radiationCoupledBase::rmap
+void Foam::radiation::radiationCoupledBase::rmap
 (
     const fvPatchScalarField& ptf,
     const labelList& addr
@@ -225,7 +227,7 @@ void Foam::radiationCoupledBase::rmap
 }
 
 
-void Foam::radiationCoupledBase::write(Ostream& os) const
+void Foam::radiation::radiationCoupledBase::write(Ostream& os) const
 {
     os.writeKeyword("emissivityMode") << emissivityMethodTypeNames_[method_]
         << token::END_STATEMENT << nl;

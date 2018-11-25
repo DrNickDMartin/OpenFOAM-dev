@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2012-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -73,12 +73,26 @@ inline Foam::scalar Foam::rhoConst<Specie>::rho(scalar p, scalar T) const
 template<class Specie>
 inline Foam::scalar Foam::rhoConst<Specie>::H(scalar p, scalar T) const
 {
-    return 0;
+    return p/rho_;
 }
 
 
 template<class Specie>
 inline Foam::scalar Foam::rhoConst<Specie>::Cp(scalar p, scalar T) const
+{
+    return 0;
+}
+
+
+template<class Specie>
+inline Foam::scalar Foam::rhoConst<Specie>::E(scalar p, scalar T) const
+{
+    return 0;
+}
+
+
+template<class Specie>
+inline Foam::scalar Foam::rhoConst<Specie>::Cv(scalar p, scalar T) const
 {
     return 0;
 }

@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -38,7 +38,6 @@ SourceFiles
 
 #include "sampledSurface.H"
 #include "isoSurface.H"
-//#include "isoSurfaceCell.H"
 #include "plane.H"
 #include "ZoneIDs.H"
 #include "fvMeshSubset.H"
@@ -60,9 +59,6 @@ class sampledCuttingPlane
 
         //- Plane
         const plane plane_;
-
-        //- Merge tolerance
-        const scalar mergeTol_;
 
         //- Whether to coarsen
         const Switch regularise_;
@@ -90,7 +86,6 @@ class sampledCuttingPlane
         scalarField pointDistance_;
 
         //- Constructed iso surface
-        //autoPtr<isoSurfaceCell> isoSurfPtr_;
         autoPtr<isoSurface> isoSurfPtr_;
 
         //- Triangles converted to faceList
@@ -159,22 +154,9 @@ public:
         //- Faces of surface
         virtual const faceList& faces() const
         {
-            if (facesPtr_.empty())
-            {
-                const triSurface& s = surface();
-
-                facesPtr_.reset(new faceList(s.size()));
-
-                forAll(s, i)
-                {
-                    facesPtr_()[i] = s[i].triFaceFace();
-                }
-            }
-            return facesPtr_;
+            return surface().faces();
         }
 
-
-        //const isoSurfaceCell& surface() const
         const isoSurface& surface() const
         {
             return isoSurfPtr_();

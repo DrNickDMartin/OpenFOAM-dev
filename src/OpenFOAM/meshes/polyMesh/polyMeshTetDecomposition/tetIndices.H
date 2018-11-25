@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2017 OpenFOAM Foundation
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -92,16 +92,6 @@ class tetIndices
         //- Point on the face, *relative to the base point*, which
         //  characterises this tet on the face.
         label tetPti_;
-
-
-    // Private static data
-
-        //- Maximum number of bad tet warnings
-        static const label maxNWarnings;
-
-        //- Current number of bad tet warnings. Warnings stop when this reaches
-        //  the maximum number.
-        static label nWarnings;
 
 
 public:

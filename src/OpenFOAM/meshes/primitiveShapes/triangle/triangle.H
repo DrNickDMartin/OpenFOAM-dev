@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+   \\    /   O peration     | Website:  https://openfoam.org
     \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -40,7 +40,6 @@ SourceFiles
 #include "tensor.H"
 #include "pointHit.H"
 #include "Random.H"
-#include "cachedRandom.H"
 #include "FixedList.H"
 #include "UList.H"
 #include "linePointRef.H"
@@ -167,10 +166,6 @@ public:
             //  distribution
             inline Point randomPoint(Random& rndGen) const;
 
-            //- Return a random point on the triangle from a uniform
-            //  distribution
-            inline Point randomPoint(cachedRandom& rndGen) const;
-
             //- Calculate the point from the given barycentric coordinates.
             inline Point barycentricToPoint(const barycentric2D& bary) const;
 
@@ -195,15 +190,17 @@ public:
             (
                 const point& p,
                 const vector& q,
-                const intersection::algorithm = intersection::FULL_RAY,
-                const intersection::direction dir = intersection::VECTOR
+                const intersection::algorithm =
+                    intersection::algorithm::fullRay,
+                const intersection::direction dir =
+                    intersection::direction::vector
             ) const;
 
             //- Fast intersection with a ray.
             //  For a hit, the pointHit.distance() is the line parameter t :
-            //  intersection=p+t*q. Only defined for VISIBLE, FULL_RAY or
-            //  HALF_RAY. tol increases the virtual size of the triangle
-            // by a relative factor.
+            //  intersection=p+t*q. Only defined for algorithm::visible,
+            //  algorithm::fullRay or algorithm::halfRay. tol increases the
+            //  virtual size of the triangle by a relative factor.
             inline pointHit intersection
             (
                 const point& p,
